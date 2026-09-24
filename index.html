@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <!-- Cosmetic only - rename for a different robot/model -->
+  <title>Robot Digital Twin</title>
+
+  <!-- Favicon -->
+  <link rel="shortcut icon" href="./favicon.ico" />
+  
+  <!-- External CSS -->
+  <link rel="stylesheet" href="./style.css" />
+
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+      }
+    }
+  </script>
+
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <!-- iPhone AR (8th Wall) - separate classic/global THREE instance, since
+       8th Wall's Threejs integration expects window.THREE, not an ES
+       module. Isolated from the ES-module THREE used everywhere else. -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="./gltfloader-classic.js" onerror="window.__gltfScriptFailed = true" onload="window.__gltfScriptLoaded = true"></script>
+  <script>window.__CAPTURED_THREE__ = window.THREE; window.__CAPTURED_GLTFLOADER__ = window.THREE && window.THREE.GLTFLoader;</script>
+  <script src="https://cdn.jsdelivr.net/npm/@8thwall/engine-binary@1/dist/xr.js" async crossorigin="anonymous" data-preload-chunks="slam"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@8thwall/xrextras@1/dist/xrextras.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+  <div id="canvas-container"></div>
+
+  <div id="status-panel" class="panel">
+    <div class="status-header">
+      <div id="dot" class="dot"></div>
+      <span id="status">Connecting...</span>
+    </div>
+    <!--
+      *** MODIFY HERE to match the degrees of freedom in main.js's AXIS_CONFIG ***
+      One .telemetry-row per joint you're animating. Each row's id (e.g.
+      "val-a1") must exactly match the corresponding `valueElementId` set in
+      main.js's AXIS_CONFIG for that joint - main.js writes the live angle
+      into whatever element has that id. Add/remove rows here to match
+      however many entries AXIS_CONFIG has (more or fewer than 6).
+    -->
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A1:</span>
+      <span id="val-a1" class="telemetry-val">0.0 °</span>
+    </div>
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A2:</span>
+      <span id="val-a2" class="telemetry-val">0.0 °</span>
+    </div>
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A3:</span>
+      <span id="val-a3" class="telemetry-val">0.0 °</span>
+    </div>
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A4:</span>
+      <span id="val-a4" class="telemetry-val">0.0 °</span>
+    </div>
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A5:</span>
+      <span id="val-a5" class="telemetry-val">0.0 °</span>
+    </div>
+    <div class="telemetry-row">
+      <span class="telemetry-label">Axis A6:</span>
+      <span id="val-a6" class="telemetry-val">0.0 °</span>
+    </div>
+    <!-- end telemetry rows -->
+  </div>
+
+  <!-- Lighting Panel (Closed by default) -->
+  <div id="light-panel" class="panel collapsed">
+    <div id="light-panel-header" class="panel-header">
+      <span>Lighting</span>
+      <span class="arrow-icon"></span>
+    </div>
+    <div class="panel-body">
+      <div class="control-group">
+        <label for="ctrl-brightness">Master Brightness <span id="lbl-brightness">100%</span></label>
+        <input type="range" id="ctrl-brightness" min="0.2" max="2.0" step="0.1" value="1.0">
+      </div>
+      <div class="control-group">
+        <label for="ctrl-angle">Light Angle <span id="lbl-angle">45°</span></label>
+        <input type="range" id="ctrl-angle" min="0" max="360" step="5" value="45">
+      </div>
+    </div>
+  </div>
+
+  <div id="ar-scan-overlay">
+    <span id="ar-scan-text">Scan surface...</span>
+  </div>
+
+  <!-- iOS Live AR Button (8th Wall) -->
+  <button id="ios-live-ar-btn" class="ios-ar-button" style="display:none;">Start Live AR (Beta)</button>
+
+  <!-- iPhone Live AR (8th Wall) - camera feed + UI, hidden until started -->
+  <canvas id="camerafeed" style="display: none;"></canvas>
+  <div id="ios-ar-scan-overlay" class="ar-scan-overlay">
+    <div class="ar-scan-card">
+      <div id="ios-ar-scan-text">Starting AR...</div>
+    </div>
+  </div>
+  <button id="ios-ar-exit-btn" class="ios-ar-exit-button" style="display: none;">Exit AR</button>
+
+  <script>
+    const __isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+    if (__isIOS) document.getElementById('ios-live-ar-btn').style.display = 'flex';
+  </script>
+
+  <script type="module" src="./main.js"></script>
+  <script src="./ar-iphone.js" defer></script>
+</body>
+</html>
