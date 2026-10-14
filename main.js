@@ -300,7 +300,7 @@ const LERP_FACTOR = 0.05; // smoothing factor per animation frame (0-1); lower =
 // Swap this to point at a different robot's model. After swapping, re-check
 // every `nodeName` in AXIS_CONFIG above against the new file's actual node
 // names, since they almost never match between different GLBs.
-const MODEL_URL = './model/KukaR1300.glb'  //Jaka_A5.glb';
+const MODEL_URL = './model/IguisRobot.glb';     // KukaR1300.glb';  //Jaka_A5.glb';
 
 // Name kept as GANTRY_CONFIG so ar-iphone.js keeps finding it (that file still needs
 // updating for rotation, see notes).
