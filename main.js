@@ -277,9 +277,9 @@ const AXIS_CONFIG = {
   PosA1: { nodeName: 'Degree1', axis: 'y', sign:  1, offset: 0, valueElementId: 'val-a1' },
   PosA2: { nodeName: 'Degree2', axis: 'z', sign:  1, offset: 0, valueElementId: 'val-a2' },
   PosA3: { nodeName: 'Degree3', axis: 'z', sign:  1, offset: 0, valueElementId: 'val-a3' },
-  PosA4: { nodeName: 'Degree4', axis: 'y', sign:  1, offset: 0, valueElementId: 'val-a4' },
+  PosA4: { nodeName: 'Degree4', axis: 'x', sign:  1, offset: 0, valueElementId: 'val-a4' },
   PosA5: { nodeName: 'Degree5', axis: 'z', sign:  -1, offset: 0, valueElementId: 'val-a5' },
-  PosA6: { nodeName: 'Degree6', axis: 'y', sign:  1, offset: 0, valueElementId: 'val-a6' }
+  PosA6: { nodeName: 'Degree6', axis: 'x', sign:  1, offset: 0, valueElementId: 'val-a6' }
   // Add/remove entries here to change the DOF count. Every entry added here
   // needs a matching HTML telemetry row (index.html) and, if you want the
   // iPhone AR view to show it too, nothing extra to do - ar-iphone.js reads
@@ -300,7 +300,7 @@ const LERP_FACTOR = 0.05; // smoothing factor per animation frame (0-1); lower =
 // Swap this to point at a different robot's model. After swapping, re-check
 // every `nodeName` in AXIS_CONFIG above against the new file's actual node
 // names, since they almost never match between different GLBs.
-const MODEL_URL = './model/IguisRobot.glb';     // KukaR1300.glb';  //Jaka_A5.glb';
+const MODEL_URL = './model/KukaR1300.glb';  //Jaka_A5.glb';
 
 // Name kept as GANTRY_CONFIG so ar-iphone.js keeps finding it (that file still needs
 // updating for rotation, see notes).
